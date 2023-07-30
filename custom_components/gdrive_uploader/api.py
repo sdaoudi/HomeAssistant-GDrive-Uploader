@@ -1,6 +1,5 @@
 import logging
 import os
-from httpx import delete
 
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
