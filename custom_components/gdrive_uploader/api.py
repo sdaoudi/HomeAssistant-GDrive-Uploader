@@ -1,7 +1,10 @@
+import logging
 import os
 
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
+
+_LOGGER = logging.getLogger(__name__)
 
 class GDriveApi:
     def __init__(self, client_secret_file_path: str):
@@ -51,12 +54,15 @@ class GDriveApi:
         return None
 
     def upload_file(self, source_file_path, parent_dir_id, directory_name):
+        _LOGGER.debug(f"source file path : {source_file_path}")
+        _LOGGER.debug(f"parent directory id : {parent_dir_id}")
+        _LOGGER.debug(f"directory name : {str(directory_name)}")
         if (not os.path.exists(source_file_path)):
             raise FileNotFoundError(f"The file with path {source_file_path} is not found.")
 
         if directory_name != "":
             try:
-                target_directory = self.find_resource_by_title(parent_dir_id, directory_name)
+                target_directory = self.find_resource_by_title(parent_dir_id, str(directory_name))
             except FileNotFoundError:
                 target_directory = self.create_folder(parent_dir_id, directory_name)
         else:
