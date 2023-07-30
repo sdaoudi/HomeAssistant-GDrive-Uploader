@@ -38,11 +38,8 @@ def setup(hass, config):
         parent_id = call.data.get(ATTR_PARENT_ID)
         dir_name = call.data.get(ATTR_DIR_NAME)
 
-        try:
-            gdrive = GDriveApi(secret_file_path)
-            gdrive.delete_directory_by_name(parent_id, dir_name)
-        except (FileExistsError, FileNotFoundError) as error:
-            _LOGGER.error(error)
+        gdrive = GDriveApi(secret_file_path)
+        gdrive.delete_directory_by_name(parent_id, dir_name)
 
     hass.services.register(DOMAIN, "upload", handle_upload)
     hass.services.register(DOMAIN, "delete", handle_delete)
