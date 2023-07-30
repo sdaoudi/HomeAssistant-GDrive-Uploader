@@ -1,0 +1,15 @@
+{
+  "domain": "gdrive_uploader",
+  "name": "GDrive Uploader",
+  "documentation": "https://github.com/sdaoudi/HomeAssistant-GDrive-Uploader",
+  "issue_tracker": "https://github.com/sdaoudi/HomeAssistant-GDrive-Uploader/issues",
+  "codeowners": ["@sdaoudi"],
+  "version": "0.1.0",
+  "integration_type": "hub",
+  "iot_class": "local_polling",
+  "loggers": ["gdrive_uploader"],
+  "requirements": [
+    "PyDrive2==1.16.1"
+  ],
+  "homeassistant": "2023.7.3"
+}

@@ -1,0 +1,18 @@
+upload:
+  fields:
+    parent_id:
+      required: true
+      advanced: false
+      example: "20BfZA1fgxxxZ4hvppPa3diltpez53aZe"
+      description: The Google Drive ID of the parent folder where the upload will be made.
+    target_dir_name:
+      required: false
+      advanced: false
+      example: "my_dir"
+      default: ""
+      description: The name of the directory where the new file will be uploaded.
+    upload_file_path:
+      required: true
+      advanced: false
+      example: "/config/home-assistant.log"
+      description: The path to retrieve the file to be uploaded.
