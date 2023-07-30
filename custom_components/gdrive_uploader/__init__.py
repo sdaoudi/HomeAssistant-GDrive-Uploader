@@ -17,7 +17,7 @@ CONFIG_SCHEMA = vol.Schema(
             }
         )
     },
-    extra=vol.REMOVE_EXTRA,
+    extra=vol.ALLOW_EXTRA,
 )
 
 def setup(hass, config):
