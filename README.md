@@ -29,6 +29,8 @@ If you don't have a service account yet, [click here](./SERVICE_ACCOUNT.md) to a
 
 ## Usage
 
+### Upload file
+
 New service `gdrive_uploader.upload`:
 
 ```yaml
@@ -54,4 +56,19 @@ script:
           parent_id: 20YTAZESppoiZ4hvuI543diltpez53tSt
           target_dir_name: "my_videos"
           upload_file_path: /config/home-assistant.log
+```
+
+### Delete file or directory
+
+New service `gdrive_uploader.delete`:
+
+```yaml
+script:
+  upload_video:
+    alias: Upload video
+    sequence:
+      - service: gdrive_uploader.upload
+        data:
+          parent_id: 20YTAZESppoiZ4hvuI543diltpez53tSt # Google Drive folder ID
+          dir_name: my_dir_to_remove # The directory name in Google Drive
 ```

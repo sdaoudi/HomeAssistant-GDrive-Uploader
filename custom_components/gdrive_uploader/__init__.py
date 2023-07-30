@@ -4,7 +4,7 @@ import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 
 from .api import GDriveApi
-from .const import (ATTR_PARENT_ID, ATTR_TARGET_DIR_NAME, ATTR_UPLOAD_FILE_PATH,
+from .const import (ATTR_DIR_NAME, ATTR_PARENT_ID, ATTR_TARGET_DIR_NAME, ATTR_UPLOAD_FILE_PATH,
                     CONF_SECRET_FILE_PATH, DOMAIN)
 
 _LOGGER = logging.getLogger(__name__)
@@ -33,8 +33,17 @@ def setup(hass, config):
         except (FileExistsError, FileNotFoundError) as error:
             _LOGGER.error(error)
 
-        hass.states.set("gdrive_uploader.upload", f"{upload_file_path}")
+    def handle_delete(call):
+        secret_file_path = config.get(DOMAIN, {}).get(CONF_SECRET_FILE_PATH)
+        parent_id = call.data.get(ATTR_PARENT_ID)
+        dir_name = call.data.get(ATTR_DIR_NAME)
+
+        gdrive = GDriveApi(secret_file_path)
+        gdrive.delete_directory_by_name(parent_id, dir_name)
 
     hass.services.register(DOMAIN, "upload", handle_upload)
+    hass.services.register(DOMAIN, "delete", handle_delete)
 
     return True
+
+

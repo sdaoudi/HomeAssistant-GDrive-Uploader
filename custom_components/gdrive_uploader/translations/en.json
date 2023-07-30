@@ -18,6 +18,21 @@
           "description": "The path to retrieve the file to be uploaded."
         }
       }
+    },
+    "delete": {
+      "name": "Delete directory or file",
+      "description": "Delete directory or file from Google Drive",
+      "fields": {
+        "parent_id": {
+          "name": "Parent ID",
+          "description": "The Google Drive ID of the parent folder that contains the resource to remove"
+        },
+        "dir_name": {
+          "name": "Directory name (or filename)",
+          "description": "The name of the resource to delete"
+        }
+      }
     }
+
   }
 }
