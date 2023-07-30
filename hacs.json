@@ -1,4 +1,5 @@
 {
   "name": "GDrive Uploader",
-  "homeassistant": "2023.7.3"
+  "homeassistant": "2023.7.3",
+  "render_readme": true
 }
