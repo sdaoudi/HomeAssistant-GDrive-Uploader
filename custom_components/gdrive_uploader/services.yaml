@@ -13,3 +13,14 @@ upload:
       required: true
       advanced: false
       example: "/config/home-assistant.log"
+delete:
+  fields:
+    parent_id:
+      required: true
+      advanced: false
+      example: "20BfZA1fgxxxZ4hvppPa3diltpez53aZe"
+    dir_name:
+      required: false
+      advanced: false
+      example: "my_dir"
+      default: ""

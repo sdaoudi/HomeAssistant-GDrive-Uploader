@@ -1,5 +1,6 @@
 import logging
 import os
+from httpx import delete
 
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
@@ -63,10 +64,13 @@ class GDriveApi:
         if directory_name != "":
             try:
                 target_directory = self.find_resource_by_title(parent_dir_id, str(directory_name))
+                _LOGGER.debug(f"target directory already exists with id : {target_directory['id']}")
             except FileNotFoundError:
                 target_directory = self.create_folder(parent_dir_id, directory_name)
+                _LOGGER.debug(f"The target directory has just been created with id : {target_directory['id']}")
         else:
             target_directory = {"id": parent_dir_id}
+            _LOGGER.debug("The parent directory is used as a target directory")
 
         filename = os.path.basename(source_file_path)
         if (self.resource_exists(target_directory["id"], filename)):
@@ -81,6 +85,25 @@ class GDriveApi:
                 ]
             }
         )
+
         file.SetContentFile(source_file_path)
         file.Upload()
+        _LOGGER.debug(f"A new file is create with id: {file['id']}")
         return file
+
+    def delete_directory_by_name(self, parent_dir_id, directory_name):
+        try:
+            resource = self.find_resource_by_title(parent_dir_id, directory_name)
+            self._delete_resource(resource["id"])
+            resource.Delete()
+        except FileNotFoundError:
+            _LOGGER.debug(f"The {directory_name} directory is not deleted because it does not exist.")
+
+    def _delete_resource(self, resource_id):
+        file_list = self.drive.ListFile({'q': f"'{resource_id}' in parents and trashed=false"}).GetList()
+        for file in file_list:
+            if file['mimeType'] == 'application/vnd.google-apps.folder':
+                self._delete_resource(file['id'])
+            file.Delete()
+
+
