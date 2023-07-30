@@ -1,0 +1,13 @@
+name: hassfest Validation
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    name: HASS Validation
+    runs-on: "ubuntu-latest"
+    steps:
+        - uses: "actions/checkout@v2"
+        - uses: "home-assistant/actions/hassfest@master"

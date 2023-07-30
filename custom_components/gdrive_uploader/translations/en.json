@@ -1,0 +1,23 @@
+{
+  "title": "GDrive Uploader",
+  "services": {
+    "upload": {
+      "name": "Upload file",
+      "description": "Upload file to Google Drive service",
+      "fields": {
+        "parent_id": {
+          "name": "Parent ID",
+          "description": "The Google Drive ID of the parent folder where the upload will be made."
+        },
+        "target_dir_name": {
+          "name": "Target directory name",
+          "description": "The name of the directory where the new file will be uploaded."
+        },
+        "upload_file_path": {
+          "name": "File path",
+          "description": "The path to retrieve the file to be uploaded."
+        }
+      }
+    }
+  }
+}
