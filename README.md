@@ -2,7 +2,7 @@
 
 [![HACS Validation](https://github.com/sdaoudi/HomeAssistant-GDrive-Uploader/actions/workflows/hacs.yaml/badge.svg)](https://github.com/sdaoudi/HomeAssistant-GDrive-Uploader/actions/workflows/hacs.yaml)
 [![hassfest Validation](https://github.com/sdaoudi/HomeAssistant-GDrive-Uploader/actions/workflows/hass.yaml/badge.svg)](https://github.com/sdaoudi/HomeAssistant-GDrive-Uploader/actions/workflows/hass.yaml)
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/custom-components/hacs)
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
 
 GDrive Uploader is a [Home Assistant](https://www.home-assistant.io/)  integration that offers service to upload files to Google Drive.
 
