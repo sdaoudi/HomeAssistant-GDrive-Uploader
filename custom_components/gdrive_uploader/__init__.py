@@ -1,4 +1,5 @@
 import logging
+import threading
 
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
@@ -27,11 +28,15 @@ def setup(hass, config):
         parent_id = call.data.get(ATTR_PARENT_ID)
         target_dir_name = call.data.get(ATTR_TARGET_DIR_NAME, "")
 
-        try:
-            gdrive = GDriveApi(secret_file_path)
-            gdrive.upload_file(upload_file_path, parent_id, target_dir_name)
-        except (FileExistsError, FileNotFoundError) as error:
-            _LOGGER.error(error)
+        def do_upload():
+            """Upload the file."""
+            try:
+                gdrive = GDriveApi(secret_file_path)
+                gdrive.upload_file(upload_file_path, parent_id, target_dir_name)
+            except (FileExistsError, FileNotFoundError) as error:
+                _LOGGER.error(error)
+
+        threading.Thread(target=do_upload).start()
 
     def handle_delete(call):
         secret_file_path = config.get(DOMAIN, {}).get(CONF_SECRET_FILE_PATH)
@@ -45,5 +50,3 @@ def setup(hass, config):
     hass.services.register(DOMAIN, "delete", handle_delete)
 
     return True
-
-
