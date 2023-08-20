@@ -50,8 +50,8 @@ class GDriveApi:
         resource_list = self.drive.ListFile({'q':  f"'{parent_directory_id}' in parents and trashed=false"}).GetList()
         for resource in resource_list:
             if(resource['title'] == resource_title):
-                return resource
-        return None
+                return True
+        return False
 
     def upload_file(self, source_file_path, parent_dir_id, directory_name):
         _LOGGER.debug(f"source file path : {source_file_path}")
