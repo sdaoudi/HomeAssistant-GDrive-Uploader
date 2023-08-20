@@ -3,6 +3,8 @@ name: hassfest Validation
 on:
   push:
   pull_request:
+  schedule:
+    - cron: 0 2 * * *
 
 jobs:
   validate:
