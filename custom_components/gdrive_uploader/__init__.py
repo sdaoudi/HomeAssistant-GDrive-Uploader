@@ -28,27 +28,21 @@ def setup(hass, config):
         parent_id = call.data.get(ATTR_PARENT_ID)
         target_dir_name = call.data.get(ATTR_TARGET_DIR_NAME, "")
         gdrive = GDriveApi(secret_file_path)
-
-        def do_upload():
-            """Upload the file."""
-            try:
-                gdrive.upload_file(upload_file_path, parent_id, target_dir_name)
-            except (FileExistsError, FileNotFoundError) as error:
-                _LOGGER.error(error)
-
-        if not gdrive.resource_exists(parent_id, target_dir_name):
-            gdrive.create_folder(parent_id, target_dir_name)
-
-        threading.Thread(target=do_upload).start()
+        try:
+            gdrive.upload_file(upload_file_path, parent_id, target_dir_name)
+        except (FileExistsError, FileNotFoundError) as error:
+            _LOGGER.error(error)
 
     def handle_delete(call):
         secret_file_path = config.get(DOMAIN, {}).get(CONF_SECRET_FILE_PATH)
         parent_id = call.data.get(ATTR_PARENT_ID)
         dir_name = call.data.get(ATTR_DIR_NAME)
         gdrive = GDriveApi(secret_file_path)
+        delete_lock = threading.Lock()
 
         def do_delete():
-            gdrive.delete_directory_by_name(parent_id, dir_name)
+            with delete_lock:
+                gdrive.delete_directory_by_name(parent_id, dir_name)
 
         threading.Thread(target=do_delete).start()
 

@@ -19,6 +19,7 @@ class GDriveApi:
         self.drive = GoogleDrive(gauth)
 
     def create_folder(self, parent_folder_id, subfolder_name):
+        _LOGGER.debug(f"Create folder {subfolder_name} in parent {parent_folder_id}")
         new_folder = self.drive.CreateFile(
             {
                 'title': subfolder_name,
@@ -50,7 +51,10 @@ class GDriveApi:
         resource_list = self.drive.ListFile({'q':  f"'{parent_directory_id}' in parents and trashed=false"}).GetList()
         for resource in resource_list:
             if(resource['title'] == resource_title):
+                _LOGGER.debug(f"resource {resource_title} exists in parent {parent_directory_id}")
                 return True
+
+        _LOGGER.debug(f"resource {resource_title} not exists in parent {parent_directory_id}")
         return False
 
     def upload_file(self, source_file_path, parent_dir_id, directory_name):
@@ -87,7 +91,7 @@ class GDriveApi:
 
         file.SetContentFile(source_file_path)
         file.Upload()
-        _LOGGER.debug(f"A new file is create with id: {file['id']}")
+        _LOGGER.debug(f"A new file is created with id: {file['id']}")
         return file
 
     def delete_directory_by_name(self, parent_dir_id, directory_name):
@@ -104,5 +108,3 @@ class GDriveApi:
             if file['mimeType'] == 'application/vnd.google-apps.folder':
                 self._delete_resource(file['id'])
             file.Delete()
-
-
