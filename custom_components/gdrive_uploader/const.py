@@ -6,3 +6,5 @@ ATTR_UPLOAD_FILE_PATH = "upload_file_path"
 CONF_SECRET_FILE_PATH = "secret_file_path"
 
 DOMAIN = "gdrive_uploader"
+UPLOAD_COMPLETED_EVENT = "upload_completed"
+UPLOAD_FAILED_EVENT = "upload_failed"

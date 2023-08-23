@@ -6,7 +6,7 @@ import voluptuous as vol
 
 from .api import GDriveApi
 from .const import (ATTR_DIR_NAME, ATTR_PARENT_ID, ATTR_TARGET_DIR_NAME, ATTR_UPLOAD_FILE_PATH,
-                    CONF_SECRET_FILE_PATH, DOMAIN)
+                    CONF_SECRET_FILE_PATH, DOMAIN, UPLOAD_COMPLETED_EVENT, UPLOAD_FAILED_EVENT)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -29,9 +29,17 @@ def setup(hass, config):
         target_dir_name = call.data.get(ATTR_TARGET_DIR_NAME, "")
         gdrive = GDriveApi(secret_file_path)
         try:
-            gdrive.upload_file(upload_file_path, parent_id, target_dir_name)
+            file = gdrive.upload_file(upload_file_path, parent_id, target_dir_name)
+            hass.bus.fire(
+                f"{DOMAIN}_{UPLOAD_COMPLETED_EVENT}",
+                {"file_id": file["id"]},
+            )
         except (FileExistsError, FileNotFoundError) as error:
             _LOGGER.error(error)
+            hass.bus.fire(
+                f"{DOMAIN}_{UPLOAD_FAILED_EVENT}",
+                {"message": str(error)},
+            )
 
     def handle_delete(call):
         secret_file_path = config.get(DOMAIN, {}).get(CONF_SECRET_FILE_PATH)
