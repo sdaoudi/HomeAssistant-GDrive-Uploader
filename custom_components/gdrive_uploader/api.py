@@ -7,15 +7,20 @@ from pydrive2.drive import GoogleDrive
 _LOGGER = logging.getLogger(__name__)
 
 class GDriveApi:
-    def __init__(self, client_secret_file_path: str):
-        settings = {
-                "client_config_backend": "service",
-                "service_config": {
-                    "client_json_file_path": client_secret_file_path,
-                }
-            }
-        gauth = GoogleAuth(settings=settings)
-        gauth.ServiceAuth()
+    def __init__(self, credentials_file_path: str):
+        gauth = GoogleAuth()
+
+        # Try to load saved client credentials
+        gauth.LoadCredentialsFile(credentials_file_path)
+        if gauth.access_token_expired:
+            # Refresh them if expired
+            gauth.Refresh()
+        else:
+            # Initialize the saved creds
+            gauth.Authorize()
+        # Save the current credentials to a file
+        gauth.SaveCredentialsFile(credentials_file_path)
+
         self.drive = GoogleDrive(gauth)
 
     def _create_folder(self, parent_folder_id, subfolder_name):

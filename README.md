@@ -20,12 +20,10 @@ In your `configuration.yaml`, include:
 
 ```yaml
 gdrive_uploader:
-  secret_file_path: "/config/secrets/service-account-secrets.json"
+  secret_file_path: "/config/secrets/credentials.json"
 ```
 
-The `secret_file_path` is the path to your service account keys file generated on the Google console.
-
-If you don't have a service account yet, [click here](./SERVICE_ACCOUNT.md) to access the detailed documentation on creating a service account.
+The `credentials.json` is the path to your credetnials.json file generated with your client_id and client_secret.
 
 ## Usage
 

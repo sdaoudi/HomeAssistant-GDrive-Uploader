@@ -6,7 +6,7 @@ import voluptuous as vol
 
 from .api import GDriveApi
 from .const import (ATTR_DIR_NAME, ATTR_PARENT_ID, ATTR_TARGET_DIR_NAME, ATTR_UPLOAD_FILE_PATH,
-                    CONF_SECRET_FILE_PATH, DOMAIN, UPLOAD_COMPLETED_EVENT, UPLOAD_FAILED_EVENT)
+                    CREDENTIALS_FILE_PATH, DOMAIN, UPLOAD_COMPLETED_EVENT, UPLOAD_FAILED_EVENT)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -14,7 +14,7 @@ CONFIG_SCHEMA = vol.Schema(
     {
         DOMAIN: vol.Schema(
             {
-                vol.Required(CONF_SECRET_FILE_PATH): cv.isfile,
+                vol.Required(CREDENTIALS_FILE_PATH): cv.isfile,
             }
         )
     },
@@ -23,11 +23,11 @@ CONFIG_SCHEMA = vol.Schema(
 
 def setup(hass, config):
     def handle_upload(call):
-        secret_file_path = config.get(DOMAIN, {}).get(CONF_SECRET_FILE_PATH)
+        credentials_file_path = config.get(DOMAIN, {}).get(CREDENTIALS_FILE_PATH)
         upload_file_path = call.data.get(ATTR_UPLOAD_FILE_PATH)
         parent_id = call.data.get(ATTR_PARENT_ID)
         target_dir_name = call.data.get(ATTR_TARGET_DIR_NAME, "")
-        gdrive = GDriveApi(secret_file_path)
+        gdrive = GDriveApi(credentials_file_path)
         try:
             file = gdrive.upload_file(upload_file_path, parent_id, target_dir_name)
             hass.bus.fire(
@@ -42,10 +42,10 @@ def setup(hass, config):
             )
 
     def handle_delete(call):
-        secret_file_path = config.get(DOMAIN, {}).get(CONF_SECRET_FILE_PATH)
+        credentials_file_path = config.get(DOMAIN, {}).get(CREDENTIALS_FILE_PATH)
         parent_id = call.data.get(ATTR_PARENT_ID)
         dir_name = call.data.get(ATTR_DIR_NAME)
-        gdrive = GDriveApi(secret_file_path)
+        gdrive = GDriveApi(credentials_file_path)
         delete_lock = threading.Lock()
 
         def do_delete():
