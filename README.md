@@ -20,10 +20,11 @@ In your `configuration.yaml`, include:
 
 ```yaml
 gdrive_uploader:
-  secret_file_path: "/config/secrets/credentials.json"
+  credentials_file_path: "/config/secrets/credentials.json"
 ```
 
-The `credentials.json` is the path to your credetnials.json file generated with your client_id and client_secret.
+The `credentials_file_path` is the path to your `credentials.json` file generated with your client_id and client_secret 
+(You can follow [this documentation](./SERVICE_ACCOUNT.md) to create your own `credentials.json` file).
 
 ## Usage
 
