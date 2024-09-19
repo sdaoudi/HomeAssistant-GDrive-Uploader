@@ -32,7 +32,13 @@ This documentation will guide you through the process of creating a Google Cloud
 
 4. Choose a role for the service account. For Google Drive API access, you can start with the "Project" > "Editor" role, which grants broad access to the project resources.
 
-5. Under "Key type," select "JSON" and click on the "Create" button. A JSON file containing the service account key will be downloaded to your computer. This file is crucial, as it will authenticate your service account.
+5. Validate the form
+
+7. Edit the new credential
+
+8. Go to Keys tab
+
+9. Add a key and select "JSON" and click on the "Create" button. A JSON file containing the service account key will be downloaded to your computer. This file is crucial, as it will authenticate your service account.
 
 ## Step 4: Granting Access to Google Drive
 
