@@ -1,1 +1,5 @@
+# Ignore all __pycache__ directories
 custom_components/gdrive_uploader/__pycache__/
+
+# Ignore all .venv directories
+.venv/

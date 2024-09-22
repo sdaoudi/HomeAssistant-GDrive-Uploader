@@ -5,25 +5,51 @@ import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 
 from .api import GDriveApi
-from .const import (ATTR_DIR_NAME, ATTR_PARENT_ID, ATTR_TARGET_DIR_NAME, ATTR_UPLOAD_FILE_PATH,
-                    CREDENTIALS_FILE_PATH, DOMAIN, UPLOAD_COMPLETED_EVENT, UPLOAD_FAILED_EVENT)
+from .const import (
+    ATTR_DIR_NAME,
+    ATTR_PARENT_ID,
+    ATTR_TARGET_DIR_NAME,
+    ATTR_UPLOAD_FILE_PATH,
+    CREDENTIALS_FILE_PATH,
+    DOMAIN,
+    SECRET_FILE_PATH,
+    UPLOAD_COMPLETED_EVENT,
+    UPLOAD_FAILED_EVENT,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
+
+def validate_credentials_or_secret(value):
+    if CREDENTIALS_FILE_PATH in value or SECRET_FILE_PATH in value:
+        return value
+    raise vol.Invalid(
+        "Either CREDENTIALS_FILE_PATH or SECRET_FILE_PATH must be provided"
+    )
+
+
 CONFIG_SCHEMA = vol.Schema(
     {
-        DOMAIN: vol.Schema(
-            {
-                vol.Required(CREDENTIALS_FILE_PATH): cv.isfile,
-            }
+        DOMAIN: vol.All(
+            vol.Schema(
+                {
+                    vol.Optional(CREDENTIALS_FILE_PATH): cv.isfile,
+                    vol.Optional(SECRET_FILE_PATH): cv.isfile,
+                }
+            ),
+            validate_credentials_or_secret,
         )
     },
     extra=vol.ALLOW_EXTRA,
 )
 
+
 def setup(hass, config):
     def handle_upload(call):
-        credentials_file_path = config.get(DOMAIN, {}).get(CREDENTIALS_FILE_PATH)
+        credentials_file_path = config.get(DOMAIN, {}).get(
+            CREDENTIALS_FILE_PATH
+        ) or config.get(DOMAIN, {}).get(SECRET_FILE_PATH)
+
         upload_file_path = call.data.get(ATTR_UPLOAD_FILE_PATH)
         parent_id = call.data.get(ATTR_PARENT_ID)
         target_dir_name = call.data.get(ATTR_TARGET_DIR_NAME, "")
