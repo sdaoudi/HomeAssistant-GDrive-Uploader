@@ -16,6 +16,10 @@
         "upload_file_path": {
           "name": "File path",
           "description": "The path to retrieve the file to be uploaded."
+        },
+        "override_file": {
+          "name": "Override file",
+          "description": "Whether to override the file if it already exists in the target directory."
         }
       }
     },

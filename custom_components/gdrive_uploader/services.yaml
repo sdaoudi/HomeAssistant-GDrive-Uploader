@@ -13,6 +13,11 @@ upload:
       required: true
       advanced: false
       example: "/config/home-assistant.log"
+    override_file:
+      required: false
+      advanced: false
+      example: "true"
+      default: "false"
 delete:
   fields:
     parent_id:

@@ -95,7 +95,7 @@ class GDriveApi:
 
         return current_folder_id
 
-    def upload_file(self, source_file_path, parent_dir_id, directory_name: str = ""):
+    def upload_file(self, source_file_path, parent_dir_id, directory_name: str = "", override_file: bool = False):
         _LOGGER.debug(f"source file path : {source_file_path}")
         _LOGGER.debug(f"parent directory id : {parent_dir_id}")
         _LOGGER.debug(f"directory name : {str(directory_name)}")
@@ -114,12 +114,17 @@ class GDriveApi:
             _LOGGER.debug("The parent directory is used as a target directory")
 
         filename = os.path.basename(source_file_path)
-        if self._resource_exists(final_folder_id, filename):
+        file_id = self._resource_exists(final_folder_id, filename)
+        if file_id and not override_file:
             raise FileExistsError(
                 f"File already exists in Google Drive with {filename} name."
             )
 
-        file = self.drive.CreateFile({"parents": [{"id": final_folder_id}]})
+        if file_id and override_file:
+            _LOGGER.debug(f"File already exists in Google Drive with {filename} name. Overriding...")
+            file = self.drive.CreateFile({'id': file_id})
+        else:
+            file = self.drive.CreateFile({"parents": [{"id": final_folder_id}]})
 
         file.SetContentFile(source_file_path)
         file.Upload()
@@ -148,7 +153,7 @@ class GDriveApi:
                 _LOGGER.debug(
                     f"resource {resource_title} exists in parent {parent_directory_id}"
                 )
-                return True
+                return resource["id"]
 
         _LOGGER.debug(
             f"resource {resource_title} not exists in parent {parent_directory_id}"

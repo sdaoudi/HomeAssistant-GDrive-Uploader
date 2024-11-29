@@ -10,6 +10,7 @@ from .const import (
     ATTR_PARENT_ID,
     ATTR_TARGET_DIR_NAME,
     ATTR_UPLOAD_FILE_PATH,
+    ATTR_OVERRIDE_FILE,
     CREDENTIALS_FILE_PATH,
     DOMAIN,
     SECRET_FILE_PATH,
@@ -53,9 +54,11 @@ def setup(hass, config):
         upload_file_path = call.data.get(ATTR_UPLOAD_FILE_PATH)
         parent_id = call.data.get(ATTR_PARENT_ID)
         target_dir_name = call.data.get(ATTR_TARGET_DIR_NAME, "")
+        override_file = call.data.get(ATTR_OVERRIDE_FILE, False)
+
         gdrive = GDriveApi(credentials_file_path)
         try:
-            file = gdrive.upload_file(upload_file_path, parent_id, target_dir_name)
+            file = gdrive.upload_file(upload_file_path, parent_id, target_dir_name, override_file)
             hass.bus.fire(
                 f"{DOMAIN}_{UPLOAD_COMPLETED_EVENT}",
                 {"file_id": file["id"]},
