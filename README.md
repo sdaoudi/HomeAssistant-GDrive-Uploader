@@ -23,7 +23,7 @@ gdrive_uploader:
   credentials_file_path: "/config/secrets/credentials.json"
 ```
 
-The `credentials_file_path` is the path to your `credentials.json` file generated with your client_id and client_secret 
+The `credentials_file_path` is the path to your `credentials.json` file generated with your client_id and client_secret
 (You can follow [this documentation](./custom_components/gdrive_uploader/ACCESS_TOKEN.md) to create your own `credentials.json` file).
 
 ## Usage
@@ -37,7 +37,7 @@ script:
   upload_video:
     alias: Upload video
     sequence:
-      - service: gdrive_uploader.upload
+      - action: gdrive_uploader.upload
         data:
           parent_id: 20YTAZESppoiZ4hvuI543diltpez53tSt # Google Drive folder ID
           upload_file_path: /config/home-assistant.log # Path of file to upload
@@ -50,11 +50,25 @@ script:
   upload_video:
     alias: Upload video
     sequence:
-      - service: gdrive_uploader.upload
+      - action: gdrive_uploader.upload
         data:
           parent_id: 20YTAZESppoiZ4hvuI543diltpez53tSt
           target_dir_name: "my_videos"
           upload_file_path: /config/home-assistant.log
+```
+
+By default, if the file is already exist in the target directory, it will be not uploaded. You can force the upload by setting `override_file` to `true`:
+
+```yaml
+script:
+  upload_video:
+    alias: Upload video
+    sequence:
+      - action: gdrive_uploader.upload
+        data:
+          parent_id: 20YTAZESppoiZ4hvuI543diltpez53tSt
+          upload_file_path: /config/home-assistant.log
+          override_file: true
 ```
 
 ### Delete file or directory
@@ -63,10 +77,10 @@ New service `gdrive_uploader.delete`:
 
 ```yaml
 script:
-  upload_video:
-    alias: Upload video
+  delete_video:
+    alias: Delete video
     sequence:
-      - service: gdrive_uploader.upload
+      - action: gdrive_uploader.delete
         data:
           parent_id: 20YTAZESppoiZ4hvuI543diltpez53tSt # Google Drive folder ID
           dir_name: my_dir_to_remove # The directory name in Google Drive
