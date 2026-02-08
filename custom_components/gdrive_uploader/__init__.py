@@ -3,6 +3,7 @@ import threading
 
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
+from homeassistant.core import SupportsResponse
 
 from .api import GDriveApi
 from .const import (
@@ -63,6 +64,7 @@ def setup(hass, config):
                 f"{DOMAIN}_{UPLOAD_COMPLETED_EVENT}",
                 {"file_id": file["id"]},
             )
+            return {"file_id": file["id"]}
         except (FileExistsError, FileNotFoundError) as error:
             _LOGGER.error(error)
             hass.bus.fire(
@@ -83,7 +85,10 @@ def setup(hass, config):
 
         threading.Thread(target=do_delete).start()
 
-    hass.services.register(DOMAIN, "upload", handle_upload)
+    hass.services.register(
+        DOMAIN, "upload", handle_upload,
+        supports_response=SupportsResponse.OPTIONAL,
+    )
     hass.services.register(DOMAIN, "delete", handle_delete)
 
     return True
