@@ -11,7 +11,7 @@
     "gdrive_uploader"
   ],
   "requirements": [
-    "PyDrive2==1.16.1"
+    "PyDrive2==1.21.3"
   ],
   "version": "0.3.0"
 }
